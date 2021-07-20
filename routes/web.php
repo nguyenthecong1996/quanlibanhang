@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/login', [AuthController::class, 'login']);
+Route::post('/get-login', [AuthController::class, 'getLogin']);
+Route::get('/logout', [AuthController::class, 'logOut']);
+
+Route::get('/register',[AuthController::class, 'getRegister']);
+Route::post('/register', [AuthController::class, 'postRegister']);
+
+Route::group(['middleware' => 'checkAdminLogin', 'prefix' => 'admin'], function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);    
 });
